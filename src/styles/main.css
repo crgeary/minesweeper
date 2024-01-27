@@ -1,0 +1,12 @@
+html {
+  height: 100%;
+}
+
+body,
+#root {
+  height: inherit;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
