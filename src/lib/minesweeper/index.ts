@@ -13,7 +13,7 @@ export function makeGrid(rows: number, columns: number, bombCount: number) {
   let currentCell = 0;
 
   while (currentCell < cellCount) {
-    grid[currentCell] = getCell(currentCell, rows, bombs);
+    grid[currentCell] = getCell(currentCell, columns, bombs);
     currentCell++;
   }
 
@@ -30,27 +30,29 @@ function chooseBombPositions(cellCount: number, bombCount: number) {
   return bombs;
 }
 
-function getCell(currentCell: number, rows: number, bombs: Set<number>) {
+function getCell(currentCell: number, columns: number, bombs: Set<number>) {
   if (bombs.has(currentCell)) {
     return -1;
   }
 
+  const hasLeft = currentCell % columns > 0;
+  const hasRight = (currentCell + 1) % columns !== 0;
+
+  const positions = [
+    { condition: hasLeft, cell: currentCell - (columns + 1) },
+    { condition: true, cell: currentCell - columns },
+    { condition: hasRight, cell: currentCell - (columns - 1) },
+    { condition: hasLeft, cell: currentCell - 1 },
+    { condition: hasRight, cell: currentCell + 1 },
+    { condition: hasLeft, cell: currentCell + (columns - 1) },
+    { condition: true, cell: currentCell + columns },
+    { condition: hasRight, cell: currentCell + (columns + 1) },
+  ];
+
   let count = 0;
 
-  const hasLeft = currentCell % rows > 0;
-  const hasRight = (currentCell + 1) % rows !== 0;
-
-  if (
-    (hasLeft && bombs.has(currentCell - 5)) ||
-    bombs.has(currentCell - rows) ||
-    (hasRight && bombs.has(currentCell - 3)) ||
-    (hasLeft && bombs.has(currentCell - 1)) ||
-    (hasRight && bombs.has(currentCell + 1)) ||
-    (hasLeft && bombs.has(currentCell + 3)) ||
-    bombs.has(currentCell + rows) ||
-    (hasRight && bombs.has(currentCell + 5))
-  ) {
-    count++;
+  for (const position of positions) {
+    count += position.condition && bombs.has(position.cell) ? 1 : 0;
   }
 
   return count;
