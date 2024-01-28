@@ -1,61 +1,59 @@
 import { randomBetween } from "../../utils/random-between";
-import { Grid } from "./types";
 
 export function makeGrid(rows: number, columns: number, bombCount: number) {
-  const cellCount = rows * columns - 1;
-  const grid: Grid = [];
+  const cellCount = rows * columns;
+  const grid: number[] = [];
 
   if (bombCount >= cellCount) {
     throw new Error("Too many bombs!");
   }
 
-  const bombs = chooseBombPositions(cellCount, bombCount);
+  const bombs = chooseBombPositions(cellCount - 1, bombCount);
 
   let currentCell = 0;
 
-  for (let i = 0; i < rows; i++) {
-    grid[i] = [];
-    for (let j = 0; j < columns; j++) {
-      grid[i][j] = bombs.has(currentCell) ? -1 : 0;
-      currentCell++;
-    }
+  while (currentCell < cellCount) {
+    grid[currentCell] = getCell(currentCell, columns, bombs);
+    currentCell++;
   }
 
-  return addHints(grid);
+  return grid;
 }
 
 function chooseBombPositions(cellCount: number, bombCount: number) {
-  const bombs = new Set();
+  const bombs = new Set<number>();
 
-  do {
+  while (bombs.size < bombCount) {
     bombs.add(randomBetween(0, cellCount));
-  } while (bombs.size < bombCount);
+  }
 
   return bombs;
 }
 
-function addHint(grid: Grid, rowIndex: number, columnIndex: number): number {
-  // prettier-ignore
-  const positions: [number, number][] = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
-  let cell = grid[rowIndex][columnIndex];
-
-  if (cell === -1) {
-    return cell;
+function getCell(currentCell: number, columns: number, bombs: Set<number>) {
+  if (bombs.has(currentCell)) {
+    return -1;
   }
 
-  for (const p of positions) {
-    cell += (grid[rowIndex + p[0]]?.[columnIndex + p[1]] ?? 0) === -1 ? 1 : 0;
+  const hasLeft = currentCell % columns > 0;
+  const hasRight = (currentCell + 1) % columns !== 0;
+
+  const positions = [
+    { condition: hasLeft, cell: currentCell - (columns + 1) },
+    { condition: true, cell: currentCell - columns },
+    { condition: hasRight, cell: currentCell - (columns - 1) },
+    { condition: hasLeft, cell: currentCell - 1 },
+    { condition: hasRight, cell: currentCell + 1 },
+    { condition: hasLeft, cell: currentCell + (columns - 1) },
+    { condition: true, cell: currentCell + columns },
+    { condition: hasRight, cell: currentCell + (columns + 1) },
+  ];
+
+  let count = 0;
+
+  for (const position of positions) {
+    count += position.condition && bombs.has(position.cell) ? 1 : 0;
   }
 
-  return cell;
-}
-
-function addHints(grid: Grid) {
-  for (let i = 0; i < grid[0].length; i++) {
-    for (let j = 0; j < grid.length; j++) {
-      grid[i][j] = addHint(grid, i, j);
-    }
-  }
-
-  return grid;
+  return count;
 }
