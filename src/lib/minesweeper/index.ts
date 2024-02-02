@@ -1,8 +1,9 @@
 import { randomBetween } from "../../utils/random-between";
+import { DirtyCell } from "./types";
 
-export function makeGrid(rows: number, columns: number, bombCount: number) {
+export function makeMinefield(rows: number, columns: number, bombCount: number) {
   const cellCount = rows * columns;
-  const grid: number[] = [];
+  const board: number[] = [];
 
   if (bombCount >= cellCount) {
     throw new Error("Too many bombs!");
@@ -13,11 +14,11 @@ export function makeGrid(rows: number, columns: number, bombCount: number) {
   let currentCell = 0;
 
   while (currentCell < cellCount) {
-    grid[currentCell] = getCell(currentCell, columns, bombs);
+    board[currentCell] = getCell(currentCell, columns, bombs);
     currentCell++;
   }
 
-  return grid;
+  return board;
 }
 
 function chooseBombPositions(cellCount: number, bombCount: number) {
@@ -56,4 +57,16 @@ function getCell(currentCell: number, columns: number, bombs: Set<number>) {
   }
 
   return count;
+}
+
+export function flagCell(cells: Map<number, number>, cell: number) {
+  const newMap = new Map(cells);
+
+  if (newMap.get(cell) === DirtyCell.Flag) {
+    newMap.delete(cell);
+  } else {
+    newMap.set(cell, DirtyCell.Flag);
+  }
+
+  return newMap;
 }
