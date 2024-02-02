@@ -1,6 +1,7 @@
 import { useReducer } from "react";
-import { flagCell, makeMinefield } from ".";
-import { Action, DirtyCell, GameAction, GameState, GameStatus } from "./types";
+import { makeMinefield } from ".";
+import { Action, GameAction, GameState, GameStatus } from "./types";
+import { flagCell, revealCell } from "./actions";
 
 type UseMineseeperInput = {
   rows: number;
@@ -11,17 +12,9 @@ type UseMineseeperInput = {
 function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case Action.FlagCell:
-      return {
-        ...state,
-        status: GameStatus.Playing,
-        dirtyCells: flagCell(state.dirtyCells, action.payload),
-      };
+      return flagCell(state, action.payload);
     case Action.RevealCell:
-      return {
-        ...state,
-        status: GameStatus.Playing,
-        dirtyCells: new Map(state.dirtyCells.set(action.payload, DirtyCell.Reveal)),
-      };
+      return revealCell(state, action.payload);
   }
 
   return state;

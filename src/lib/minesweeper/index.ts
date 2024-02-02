@@ -1,5 +1,4 @@
 import { randomBetween } from "../../utils/random-between";
-import { DirtyCell } from "./types";
 
 export function makeMinefield(rows: number, columns: number, bombCount: number) {
   const cellCount = rows * columns;
@@ -57,16 +56,4 @@ function getCell(currentCell: number, columns: number, bombs: Set<number>) {
   }
 
   return count;
-}
-
-export function flagCell(cells: Map<number, number>, cell: number) {
-  const newMap = new Map(cells);
-
-  if (newMap.get(cell) === DirtyCell.Flag) {
-    newMap.delete(cell);
-  } else {
-    newMap.set(cell, DirtyCell.Flag);
-  }
-
-  return newMap;
 }
