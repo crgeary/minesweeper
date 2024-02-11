@@ -85,8 +85,8 @@ function App() {
                 className={classNames(
                   "border border-gray-300 w-9 h-9 flex items-center justify-center flex-col",
                   {
-                    "bg-white": state.dirtyCells.get(i) === -1,
-                    "bg-gray-100": state.dirtyCells.get(i) !== -1,
+                    "bg-white": state.dirtyCells[i] === -1,
+                    "bg-gray-100": state.dirtyCells[i] !== -1,
                   },
                 )}
                 onClick={() => {
@@ -105,13 +105,13 @@ function App() {
               >
                 <span
                   className={classNames("text-xs", {
-                    "opacity-10": state.dirtyCells.get(i) !== -1,
+                    "opacity-10": state.dirtyCells[i] !== -1,
                   })}
                 >
                   {s === -1 ? "💣" : s === 0 ? null : s}
                 </span>
 
-                <span className="text-xs">{state.dirtyCells.get(i) === 1 ? "⛳️" : null}</span>
+                <span className="text-xs">{state.dirtyCells[i] === 1 ? "⛳️" : null}</span>
               </button>
             ))}
           </div>

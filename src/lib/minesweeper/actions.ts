@@ -2,14 +2,14 @@ import { makeMinefield } from ".";
 import { DirtyCell, GameMode, GameSettings, GameState, GameStatus } from "./types";
 
 export function revealCell(gameState: GameState, chosenCell: number): GameState {
-  const dirtyCells = new Map(gameState.dirtyCells);
+  const dirtyCells = { ...gameState.dirtyCells };
   let status = GameStatus.Playing;
 
-  if (dirtyCells.get(chosenCell) !== DirtyCell.Flag) {
-    dirtyCells.set(chosenCell, DirtyCell.Reveal);
+  if (dirtyCells[chosenCell] !== DirtyCell.Flag) {
+    dirtyCells[chosenCell] = DirtyCell.Reveal;
   }
 
-  if (dirtyCells.get(chosenCell) === DirtyCell.Reveal && gameState.minefield[chosenCell] === -1) {
+  if (dirtyCells[chosenCell] === DirtyCell.Reveal && gameState.minefield[chosenCell] === -1) {
     status = GameStatus.Lost;
   }
 
@@ -21,12 +21,12 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 }
 
 export function flagCell(gameState: GameState, chosenCell: number): GameState {
-  const dirtyCells = new Map(gameState.dirtyCells);
+  const dirtyCells = { ...gameState.dirtyCells };
 
-  if (dirtyCells.get(chosenCell) === DirtyCell.Flag) {
-    dirtyCells.delete(chosenCell);
-  } else if (dirtyCells.get(chosenCell) !== DirtyCell.Reveal) {
-    dirtyCells.set(chosenCell, DirtyCell.Flag);
+  if (dirtyCells[chosenCell] === DirtyCell.Flag) {
+    delete dirtyCells[chosenCell];
+  } else if (dirtyCells[chosenCell] !== DirtyCell.Reveal) {
+    dirtyCells[chosenCell] = DirtyCell.Flag;
   }
 
   return {
@@ -43,6 +43,6 @@ export function initGame(gameState: GameState, mode: GameMode, settings: GameSet
     settings,
     minefield: makeMinefield(settings.rows, settings.columns, settings.bombCount),
     status: GameStatus.NotStarted,
-    dirtyCells: new Map(),
+    dirtyCells: {},
   };
 }

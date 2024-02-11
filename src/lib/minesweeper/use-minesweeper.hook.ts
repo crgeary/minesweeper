@@ -45,7 +45,7 @@ export function useMinesweeper(input: UseMineseeperInput) {
       ...defaultModeSettings,
     },
     status: GameStatus.NotStarted,
-    dirtyCells: new Map<number, number>(),
+    dirtyCells: {},
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);

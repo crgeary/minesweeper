@@ -40,7 +40,7 @@ export type GameState = {
   minefield: number[];
   mode: GameMode;
   settings: GameSettings;
-  dirtyCells: Map<number, DirtyCell>;
+  dirtyCells: Record<number, DirtyCell>;
 };
 
 export type GameAction =
