@@ -1,4 +1,5 @@
-import { DirtyCell, GameState, GameStatus } from "./types";
+import { makeMinefield } from ".";
+import { DirtyCell, GameMode, GameSettings, GameState, GameStatus } from "./types";
 
 export function revealCell(gameState: GameState, chosenCell: number): GameState {
   const dirtyCells = new Map(gameState.dirtyCells);
@@ -32,5 +33,16 @@ export function flagCell(gameState: GameState, chosenCell: number): GameState {
     ...gameState,
     status: GameStatus.Playing,
     dirtyCells,
+  };
+}
+
+export function initGame(gameState: GameState, mode: GameMode, settings: GameSettings): GameState {
+  return {
+    ...gameState,
+    mode,
+    settings,
+    minefield: makeMinefield(settings.rows, settings.columns, settings.bombCount),
+    status: GameStatus.NotStarted,
+    dirtyCells: new Map(),
   };
 }
