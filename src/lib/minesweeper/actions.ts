@@ -17,6 +17,14 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
     status = GameStatus.Lost;
   }
 
+  const revealCells = Object.values(dirtyCells).filter((c) => c === DirtyCell.Reveal);
+  const reveledCellCount = revealCells.length;
+  const nonMineCellCount = gameState.minefield.filter((c) => c !== -1).length;
+
+  if (reveledCellCount === nonMineCellCount) {
+    status = GameStatus.Won;
+  }
+
   return {
     ...gameState,
     dirtyCells,
@@ -44,7 +52,12 @@ function recursiveRevealCell(
   ];
 
   for (const position of positions) {
-    if (position.condition && typeof dirtyCells[position.cell] === "undefined") {
+    if (
+      position.condition &&
+      position.cell >= 0 &&
+      position.cell < gameState.minefield.length &&
+      typeof dirtyCells[position.cell] === "undefined"
+    ) {
       dirtyCells[position.cell] = DirtyCell.Reveal;
       if (gameState.minefield[position.cell] === 0) {
         recursiveRevealCell(gameState, dirtyCells, position.cell);
