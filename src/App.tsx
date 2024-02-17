@@ -14,7 +14,14 @@ function App() {
   });
 
   return (
-    <div className="h-full flex items-center justify-center bg-gray-50">
+    <div
+      className={classNames("h-full flex items-center justify-center", {
+        "bg-green-300": state.mode === GameMode.Easy,
+        "bg-orange-300": state.mode === GameMode.Medium,
+        "bg-red-300": state.mode === GameMode.Hard,
+        "bg-blue-300": state.mode === GameMode.Custom,
+      })}
+    >
       <div>
         <div className="flex justify-between">
           <div>Status: {status}</div>
@@ -22,7 +29,7 @@ function App() {
         </div>
         <div className="flex gap-2">
           <button
-            className="inline-block px-1 bg-green-300"
+            className="inline-block px-1 border-2 border-black bg-green-300"
             onClick={() =>
               dispatch({
                 type: Action.Init,
@@ -35,7 +42,7 @@ function App() {
             Easy
           </button>
           <button
-            className="inline-block px-1 bg-orange-300"
+            className="inline-block px-1 border-2 border-black bg-orange-300"
             onClick={() =>
               dispatch({
                 type: Action.Init,
@@ -48,7 +55,7 @@ function App() {
             Medium
           </button>
           <button
-            className="inline-block px-1 bg-red-300"
+            className="inline-block px-1 border-2 border-black bg-red-300"
             onClick={() =>
               dispatch({
                 type: Action.Init,
@@ -61,27 +68,27 @@ function App() {
             Hard
           </button>
         </div>
-        <div className="flex gap-2 my-2">
+        <div className="flex gap-1 my-2">
           <input
             type="number"
             value={rows}
             onChange={(e) => setRows(Number(e.target.value))}
-            className="w-16 border-2 border-blue-300"
+            className="w-16 border-2 border-black"
           />
           <input
             type="number"
             value={columns}
             onChange={(e) => setColumns(Number(e.target.value))}
-            className="w-16 border-2 border-blue-300"
+            className="w-16 border-2 border-black"
           />
           <input
             type="number"
             value={bombCount}
             onChange={(e) => setBombCount(Number(e.target.value))}
-            className="w-16 border-2 border-blue-300"
+            className="w-16 border-2 border-black"
           />
           <button
-            className="inline-block px-1 bg-blue-300"
+            className="inline-block px-1 border-2 border-black bg-blue-300"
             onClick={() =>
               dispatch({
                 type: Action.Init,
@@ -111,10 +118,13 @@ function App() {
               <button
                 key={i}
                 className={classNames(
-                  "border border-gray-300 w-9 h-9 flex items-center justify-center flex-col",
+                  "border-2 border-black w-9 h-9 flex items-center justify-center flex-col",
                   {
                     "bg-white": state.dirtyCells[i] === -1,
-                    "bg-gray-100": state.dirtyCells[i] !== -1,
+                    "bg-green-200": state.dirtyCells[i] !== -1 && state.mode === GameMode.Easy,
+                    "bg-orange-200": state.dirtyCells[i] !== -1 && state.mode === GameMode.Medium,
+                    "bg-red-200": state.dirtyCells[i] !== -1 && state.mode === GameMode.Hard,
+                    "bg-blue-200": state.dirtyCells[i] !== -1 && state.mode === GameMode.Custom,
                   },
                 )}
                 onClick={() => {
@@ -146,6 +156,7 @@ function App() {
           {(status === GameStatus.Lost || status === GameStatus.Won) && (
             <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
               <button
+                className="border-2 border-black bg-white px-4 py-2"
                 onClick={() =>
                   dispatch({
                     type: Action.Restart,
