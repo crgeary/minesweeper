@@ -2,8 +2,13 @@ import classNames from "classnames";
 
 import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
 import { Action, GameMode, GameStatus } from "./lib/minesweeper/types";
+import { useState } from "react";
 
 function App() {
+  const [rows, setRows] = useState(4);
+  const [columns, setColumns] = useState(10);
+  const [bombCount, setBombCount] = useState(2);
+
   const { dispatch, state, flags, minefield, settings, status } = useMinesweeper({
     defaultMode: GameMode.Easy,
   });
@@ -15,7 +20,7 @@ function App() {
           <div>Status: {status}</div>
           <div>{settings.bombCount - flags.length} ⛳️</div>
         </div>
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-2">
           <button
             className="inline-block px-1 bg-green-300"
             onClick={() =>
@@ -55,6 +60,26 @@ function App() {
           >
             Hard
           </button>
+        </div>
+        <div className="flex gap-2 my-2">
+          <input
+            type="number"
+            value={rows}
+            onChange={(e) => setRows(Number(e.target.value))}
+            className="w-16 border-2 border-blue-300"
+          />
+          <input
+            type="number"
+            value={columns}
+            onChange={(e) => setColumns(Number(e.target.value))}
+            className="w-16 border-2 border-blue-300"
+          />
+          <input
+            type="number"
+            value={bombCount}
+            onChange={(e) => setBombCount(Number(e.target.value))}
+            className="w-16 border-2 border-blue-300"
+          />
           <button
             className="inline-block px-1 bg-blue-300"
             onClick={() =>
@@ -63,9 +88,9 @@ function App() {
                 payload: {
                   mode: GameMode.Custom,
                   settings: {
-                    rows: 4,
-                    columns: 10,
-                    bombCount: 2,
+                    rows,
+                    columns,
+                    bombCount,
                   },
                 },
               })
