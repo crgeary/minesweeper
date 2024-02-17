@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { Action, GameAction, GameMode, GameState, GameStatus } from "./types";
+import { Action, DirtyCell, GameAction, GameMode, GameState, GameStatus } from "./types";
 
 import { flagCell, initGame, revealCell } from "./actions";
 import { GAME_MODES } from "./constants";
@@ -50,12 +50,19 @@ export function useMinesweeper(input: UseMineseeperInput) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const flags = Object.keys(state.dirtyCells).filter(
+    (k) => state.dirtyCells[Number(k)] === DirtyCell.Flag,
+  );
+
   return {
     minefield: state.minefield,
     state,
     dispatch,
 
     // ...
+
+    flags,
     settings: state.settings,
+    status: state.status,
   };
 }

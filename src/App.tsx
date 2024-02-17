@@ -4,14 +4,17 @@ import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
 import { Action, GameMode, GameStatus } from "./lib/minesweeper/types";
 
 function App() {
-  const { minefield, dispatch, state, settings } = useMinesweeper({
+  const { dispatch, state, flags, minefield, settings, status } = useMinesweeper({
     defaultMode: GameMode.Easy,
   });
 
   return (
     <div className="h-full flex items-center justify-center bg-gray-50">
       <div>
-        <div>Status: {state.status}</div>
+        <div className="flex justify-between">
+          <div>Status: {status}</div>
+          <div>{settings.bombCount - flags.length} ⛳️</div>
+        </div>
         <div className="flex gap-2 mb-2">
           <button
             className="inline-block px-1 bg-green-300"
@@ -115,7 +118,7 @@ function App() {
               </button>
             ))}
           </div>
-          {(state.status === GameStatus.Lost || state.status === GameStatus.Won) && (
+          {(status === GameStatus.Lost || status === GameStatus.Won) && (
             <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
               <button
                 onClick={() =>
