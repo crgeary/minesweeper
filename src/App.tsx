@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
-import { Action, GameMode, GameStatus } from "./lib/minesweeper/types";
+import { Action, GameStatus } from "./lib/minesweeper/types";
 import { useState } from "react";
 import { Button } from "./components/button.component";
 import { ModeSelector } from "./components/mode-selector.component";
@@ -9,6 +9,8 @@ import { ModeSelector } from "./components/mode-selector.component";
 import { Modal } from "./components/modal.component";
 import { Input } from "./components/input.component";
 import { Paper } from "./components/paper.component";
+import { GAME_MODES } from "./constants";
+import { GameMode } from "./types";
 
 function App() {
   const [rows, setRows] = useState(4);
@@ -18,7 +20,7 @@ function App() {
   const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
 
   const { dispatch, state, flags, minefield, settings, status } = useMinesweeper({
-    defaultMode: GameMode.Easy,
+    defaultGameSettings: GAME_MODES[GameMode.Easy].settings,
   });
 
   return (
@@ -29,23 +31,14 @@ function App() {
           onSelectMode={(mode) => {
             dispatch({
               type: Action.Init,
-              payload: {
-                mode: mode as Exclude<GameMode, GameMode.Custom>,
-              },
+              payload: GAME_MODES[mode as Exclude<GameMode, GameMode.Custom>].settings,
             });
             setIsGameModeSelectorOpen(false);
           }}
         />
       </Modal>
 
-      <div
-        className={classNames("h-full flex items-center justify-center", {
-          "bg-green-300": state.mode === GameMode.Easy,
-          "bg-orange-300": state.mode === GameMode.Medium,
-          "bg-red-300": state.mode === GameMode.Hard,
-          "bg-blue-300": state.mode === GameMode.Custom,
-        })}
-      >
+      <div className="h-full flex items-center justify-center">
         <div>
           <Button variant="default" onClick={() => setIsGameModeSelectorOpen(true)}>
             Settings
@@ -74,12 +67,9 @@ function App() {
                 dispatch({
                   type: Action.Init,
                   payload: {
-                    mode: GameMode.Custom,
-                    settings: {
-                      rows,
-                      columns,
-                      bombCount,
-                    },
+                    rows,
+                    columns,
+                    bombCount,
                   },
                 })
               }

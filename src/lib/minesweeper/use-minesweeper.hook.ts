@@ -1,8 +1,7 @@
 import { useReducer } from "react";
-import { Action, DirtyCell, GameAction, GameMode, GameState, GameStatus } from "./types";
+import { Action, DirtyCell, GameAction, GameSettings, GameState, GameStatus } from "./types";
 
 import { flagCell, initGame, revealCell } from "./actions";
-import { GAME_MODES } from "./constants";
 import { makeMinefield } from ".";
 
 function reducer(state: GameState, action: GameAction): GameState {
@@ -12,38 +11,32 @@ function reducer(state: GameState, action: GameAction): GameState {
     case Action.RevealCell:
       return revealCell(state, action.payload);
     case Action.Init:
-      return initGame(
-        state,
-        action.payload.mode,
-        action.payload.mode === GameMode.Custom
-          ? action.payload.settings
-          : GAME_MODES[action.payload.mode].settings,
-      );
+      return initGame(state, action.payload);
     case Action.Restart:
-      return initGame(state, state.mode, state.settings);
+      return initGame(state, state.settings);
   }
 
   return state;
 }
 
 type UseMineseeperInput = Partial<{
-  defaultMode: Exclude<GameMode, GameMode.Custom>;
+  defaultGameSettings: GameSettings;
 }>;
 
 export function useMinesweeper(input: UseMineseeperInput) {
-  const defaultMode = input.defaultMode ?? GameMode.Hard;
-  const defaultModeSettings = GAME_MODES[defaultMode].settings;
+  const defaultGameSettings = input.defaultGameSettings ?? {
+    rows: 4,
+    columns: 4,
+    bombCount: 10,
+  };
 
   const initialState: GameState = {
     minefield: makeMinefield(
-      defaultModeSettings.rows,
-      defaultModeSettings.columns,
-      defaultModeSettings.bombCount,
+      defaultGameSettings.rows,
+      defaultGameSettings.columns,
+      defaultGameSettings.bombCount,
     ),
-    mode: defaultMode,
-    settings: {
-      ...defaultModeSettings,
-    },
+    settings: defaultGameSettings,
     status: GameStatus.NotStarted,
     dirtyCells: {},
   };
