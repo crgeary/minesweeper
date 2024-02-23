@@ -57,3 +57,7 @@ function getCell(currentCell: number, columns: number, bombs: Set<number>) {
 
   return count;
 }
+
+// Types..
+
+export type { GameSettings } from "./types";
