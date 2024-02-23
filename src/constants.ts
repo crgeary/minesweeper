@@ -1,4 +1,5 @@
-import { GameMode, GameModeObject } from "./types";
+import { GameMode } from "./types";
+import type { GameModeObject } from "./types";
 
 export const GAME_MODES: Omit<Record<GameMode, GameModeObject>, GameMode.Custom> = {
   [GameMode.Easy]: {

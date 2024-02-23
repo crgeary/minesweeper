@@ -1,8 +1,10 @@
 import classNames from "classnames";
 
 import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
-import { Action, GameMode, GameStatus } from "./lib/minesweeper/types";
+import { Action, GameStatus } from "./lib/minesweeper/types";
 import { useState } from "react";
+import { GAME_MODES } from "./constants";
+import { GameMode } from "./types";
 
 function App() {
   const [rows, setRows] = useState(4);
@@ -10,7 +12,7 @@ function App() {
   const [bombCount, setBombCount] = useState(2);
 
   const { dispatch, state, flags, minefield, settings, status } = useMinesweeper({
-    defaultMode: GameMode.Easy,
+    defaultGameSettings: GAME_MODES[GameMode.Easy].settings,
   });
 
   return (
@@ -26,9 +28,7 @@ function App() {
             onClick={() =>
               dispatch({
                 type: Action.Init,
-                payload: {
-                  mode: GameMode.Easy,
-                },
+                payload: GAME_MODES[GameMode.Easy].settings,
               })
             }
           >
@@ -39,9 +39,7 @@ function App() {
             onClick={() =>
               dispatch({
                 type: Action.Init,
-                payload: {
-                  mode: GameMode.Medium,
-                },
+                payload: GAME_MODES[GameMode.Medium].settings,
               })
             }
           >
@@ -52,9 +50,7 @@ function App() {
             onClick={() =>
               dispatch({
                 type: Action.Init,
-                payload: {
-                  mode: GameMode.Hard,
-                },
+                payload: GAME_MODES[GameMode.Hard].settings,
               })
             }
           >
@@ -86,12 +82,9 @@ function App() {
               dispatch({
                 type: Action.Init,
                 payload: {
-                  mode: GameMode.Custom,
-                  settings: {
-                    rows,
-                    columns,
-                    bombCount,
-                  },
+                  rows,
+                  columns,
+                  bombCount,
                 },
               })
             }
