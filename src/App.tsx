@@ -10,7 +10,7 @@ import { GAME_MODES } from "./constants";
 import { GameMode } from "./types";
 import { Minefield } from "./components/minefield.component";
 
-import { FaFlag } from "react-icons/fa";
+import { FaFlag, FaCog } from "react-icons/fa";
 
 function App() {
   const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
@@ -37,13 +37,14 @@ function App() {
 
       <div className="h-full flex items-center justify-center bg-yellow-300">
         <div>
-          <Button variant="default" onClick={() => setIsGameModeSelectorOpen(true)}>
-            Settings
-          </Button>
           <div className="flex justify-between">
-            <div>Status: {status}</div>
-            <div>
-              {settings.bombCount - flags.length} <FaFlag />
+            <button onClick={() => setIsGameModeSelectorOpen(true)}>
+              <span className="sr-only">Settings</span>
+              <FaCog />
+            </button>
+            <div className="flex items-center">
+              <span className="mr-2">{settings.bombCount - flags.length}</span>
+              <FaFlag />
             </div>
           </div>
 
