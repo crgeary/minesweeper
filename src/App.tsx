@@ -27,7 +27,8 @@ function App() {
     <>
       <Modal isOpen={isGameModeSelectorOpen} setIsOpen={setIsGameModeSelectorOpen}>
         <ModeSelector
-          defaultMode="medium"
+          defaultMode={GameMode.Medium}
+          modes={GAME_MODES}
           onSelectMode={(mode) => {
             dispatch({
               type: Action.Init,

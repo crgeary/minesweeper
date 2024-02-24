@@ -5,8 +5,8 @@ export const GAME_MODES: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>
   [GameMode.Easy]: {
     name: "Easy",
     settings: {
-      rows: 8,
-      columns: 8,
+      rows: 9,
+      columns: 9,
       bombCount: 10,
     },
   },
@@ -22,7 +22,7 @@ export const GAME_MODES: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>
     name: "Hard",
     settings: {
       rows: 16,
-      columns: 32,
+      columns: 30,
       bombCount: 99,
     },
   },
