@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { Button } from "./button.component";
 import { Input } from "./input.component";
 import { GameMode, GameModeObject } from "../types";
+import { GameSettings } from "../lib/minesweeper";
 
 type ModeSelectorProps = {
   modes: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>;
   defaultMode: Exclude<GameMode, GameMode.Custom>;
-  onSelectMode: (mode: GameMode) => void;
+  onStartGame: (settings: GameSettings, mode?: GameMode) => void;
 };
 
-export function ModeSelector({ defaultMode, modes, onSelectMode }: ModeSelectorProps) {
+export function ModeSelector({ defaultMode, modes, onStartGame }: ModeSelectorProps) {
   const [mode, setMode] = useState<GameMode>(defaultMode);
 
   const [rows, setRows] = useState(modes[defaultMode].settings.rows);
@@ -72,7 +73,10 @@ export function ModeSelector({ defaultMode, modes, onSelectMode }: ModeSelectorP
         </div>
       </div>
       <div className="p-4 border-t-2 border-black">
-        <Button variant={mode ?? "default"} onClick={() => onSelectMode(mode)}>
+        <Button
+          variant={mode ?? "default"}
+          onClick={() => onStartGame({ rows, columns, bombCount }, mode)}
+        >
           Start {mode !== GameMode.Custom ? modes[mode].name : "Custom"} Game
         </Button>
       </div>

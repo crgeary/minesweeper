@@ -29,10 +29,10 @@ function App() {
         <ModeSelector
           defaultMode={GameMode.Medium}
           modes={GAME_MODES}
-          onSelectMode={(mode) => {
+          onStartGame={(settings) => {
             dispatch({
               type: Action.Init,
-              payload: GAME_MODES[mode as Exclude<GameMode, GameMode.Custom>].settings,
+              payload: settings,
             });
             setIsGameModeSelectorOpen(false);
           }}
@@ -49,35 +49,6 @@ function App() {
             <div>{settings.bombCount - flags.length} ⛳️</div>
           </div>
 
-          <div className="flex gap-1 my-2">
-            <Input type="number" value={rows} onChange={(e) => setRows(Number(e.target.value))} />
-            <Input
-              type="number"
-              value={columns}
-              onChange={(e) => setColumns(Number(e.target.value))}
-            />
-            <Input
-              type="number"
-              value={bombCount}
-              onChange={(e) => setBombCount(Number(e.target.value))}
-            />
-            <Button
-              variant="default"
-              className=" bg-blue-300"
-              onClick={() =>
-                dispatch({
-                  type: Action.Init,
-                  payload: {
-                    rows,
-                    columns,
-                    bombCount,
-                  },
-                })
-              }
-            >
-              Custom
-            </Button>
-          </div>
           <Paper className="relative p-4">
             <div
               style={{
