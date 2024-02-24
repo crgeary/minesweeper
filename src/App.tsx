@@ -1,157 +1,89 @@
-import classNames from "classnames";
-
 import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
 import { Action, GameStatus } from "./lib/minesweeper/types";
 import { useState } from "react";
+import { Button } from "./components/button.component";
+import { ModeSelector } from "./components/mode-selector.component";
+
+import { Modal } from "./components/modal.component";
+import { Paper } from "./components/paper.component";
 import { GAME_MODES } from "./constants";
 import { GameMode } from "./types";
+import { Minefield } from "./components/minefield.component";
+
+import { FaFlag, FaCog } from "react-icons/fa";
 
 function App() {
-  const [rows, setRows] = useState(4);
-  const [columns, setColumns] = useState(10);
-  const [bombCount, setBombCount] = useState(2);
+  const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
 
   const { dispatch, state, flags, minefield, settings, status } = useMinesweeper({
     defaultGameSettings: GAME_MODES[GameMode.Easy].settings,
   });
 
   return (
-    <div className="h-full flex items-center justify-center bg-gray-50">
-      <div>
-        <div className="flex justify-between">
-          <div>Status: {status}</div>
-          <div>{settings.bombCount - flags.length} ⛳️</div>
-        </div>
-        <div className="flex gap-2">
-          <button
-            className="inline-block px-1 bg-green-300"
-            onClick={() =>
-              dispatch({
-                type: Action.Init,
-                payload: GAME_MODES[GameMode.Easy].settings,
-              })
-            }
-          >
-            Easy
-          </button>
-          <button
-            className="inline-block px-1 bg-orange-300"
-            onClick={() =>
-              dispatch({
-                type: Action.Init,
-                payload: GAME_MODES[GameMode.Medium].settings,
-              })
-            }
-          >
-            Medium
-          </button>
-          <button
-            className="inline-block px-1 bg-red-300"
-            onClick={() =>
-              dispatch({
-                type: Action.Init,
-                payload: GAME_MODES[GameMode.Hard].settings,
-              })
-            }
-          >
-            Hard
-          </button>
-        </div>
-        <div className="flex gap-2 my-2">
-          <input
-            type="number"
-            value={rows}
-            onChange={(e) => setRows(Number(e.target.value))}
-            className="w-16 border-2 border-blue-300"
-          />
-          <input
-            type="number"
-            value={columns}
-            onChange={(e) => setColumns(Number(e.target.value))}
-            className="w-16 border-2 border-blue-300"
-          />
-          <input
-            type="number"
-            value={bombCount}
-            onChange={(e) => setBombCount(Number(e.target.value))}
-            className="w-16 border-2 border-blue-300"
-          />
-          <button
-            className="inline-block px-1 bg-blue-300"
-            onClick={() =>
-              dispatch({
-                type: Action.Init,
-                payload: {
-                  rows,
-                  columns,
-                  bombCount,
-                },
-              })
-            }
-          >
-            Custom
-          </button>
-        </div>
-        <div className="relative">
-          <div
-            style={{
-              gridTemplateColumns: `repeat(${settings.columns}, minmax(0, 1fr))`,
-              gridTemplateRows: `repeat(${settings.rows}, minmax(0, 1fr))`,
-            }}
-            className="grid gap-0.5"
-          >
-            {minefield.map((s, i) => (
-              <button
-                key={i}
-                className={classNames(
-                  "border border-gray-300 w-9 h-9 flex items-center justify-center flex-col",
-                  {
-                    "bg-white": state.dirtyCells[i] === -1,
-                    "bg-gray-100": state.dirtyCells[i] !== -1,
-                  },
-                )}
-                onClick={() => {
-                  dispatch({
-                    type: Action.RevealCell,
-                    payload: i,
-                  });
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  dispatch({
-                    type: Action.FlagCell,
-                    payload: i,
-                  });
-                }}
-              >
-                <span
-                  className={classNames("text-xs", {
-                    "opacity-10": state.dirtyCells[i] !== -1,
-                  })}
-                >
-                  {s === -1 ? "💣" : s === 0 ? null : s}
-                </span>
+    <>
+      <Modal isOpen={isGameModeSelectorOpen} setIsOpen={setIsGameModeSelectorOpen}>
+        <ModeSelector
+          defaultMode={GameMode.Medium}
+          modes={GAME_MODES}
+          onStartGame={(settings) => {
+            dispatch({
+              type: Action.Init,
+              payload: settings,
+            });
+            setIsGameModeSelectorOpen(false);
+          }}
+        />
+      </Modal>
 
-                <span className="text-xs">{state.dirtyCells[i] === 1 ? "⛳️" : null}</span>
-              </button>
-            ))}
-          </div>
-          {(status === GameStatus.Lost || status === GameStatus.Won) && (
-            <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
-              <button
-                onClick={() =>
-                  dispatch({
-                    type: Action.Restart,
-                  })
-                }
-              >
-                Restart Game
-              </button>
+      <div className="h-full flex items-center justify-center bg-yellow-300">
+        <div>
+          <div className="flex justify-between">
+            <button onClick={() => setIsGameModeSelectorOpen(true)}>
+              <span className="sr-only">Settings</span>
+              <FaCog />
+            </button>
+            <div className="flex items-center">
+              <span className="mr-2">{settings.bombCount - flags.length}</span>
+              <FaFlag />
             </div>
-          )}
+          </div>
+
+          <Paper className="relative p-4">
+            <Minefield
+              cells={minefield}
+              dirtyCells={state.dirtyCells}
+              settings={settings}
+              onFlag={(cell) => {
+                dispatch({
+                  type: Action.FlagCell,
+                  payload: cell,
+                });
+              }}
+              onReveal={(cell) => {
+                dispatch({
+                  type: Action.RevealCell,
+                  payload: cell,
+                });
+              }}
+            />
+            {(status === GameStatus.Lost || status === GameStatus.Won) && (
+              <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50 p-8">
+                <Button
+                  variant="default"
+                  onClick={() =>
+                    dispatch({
+                      type: Action.Restart,
+                    })
+                  }
+                >
+                  Restart Game
+                </Button>
+              </div>
+            )}
+          </Paper>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
