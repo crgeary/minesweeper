@@ -10,7 +10,8 @@ import { GAME_MODES } from "./constants";
 import { GameMode } from "./types";
 import { Minefield } from "./components/minefield.component";
 
-import { FaFlag, FaCog } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
+import { SegmentDisplay } from "./components/segment-display";
 
 function App() {
   const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
@@ -42,44 +43,46 @@ function App() {
               <span className="sr-only">Settings</span>
               <FaCog />
             </button>
-            <div className="flex items-center">
-              <span className="mr-2">{settings.bombCount - flags.length}</span>
-              <FaFlag />
-            </div>
           </div>
 
-          <Paper className="relative p-4">
-            <Minefield
-              cells={minefield}
-              dirtyCells={state.dirtyCells}
-              settings={settings}
-              onFlag={(cell) => {
-                dispatch({
-                  type: Action.FlagCell,
-                  payload: cell,
-                });
-              }}
-              onReveal={(cell) => {
-                dispatch({
-                  type: Action.RevealCell,
-                  payload: cell,
-                });
-              }}
-            />
-            {(status === GameStatus.Lost || status === GameStatus.Won) && (
-              <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50 p-8">
-                <Button
-                  variant="default"
-                  onClick={() =>
-                    dispatch({
-                      type: Action.Restart,
-                    })
-                  }
-                >
-                  Restart Game
-                </Button>
-              </div>
-            )}
+          <Paper>
+            <div className="flex justify-between border-b-2 border-black p-4">
+              <SegmentDisplay value={0} />
+              <SegmentDisplay value={settings.bombCount - flags.length} />
+            </div>
+            <div className="relative p-4">
+              <Minefield
+                cells={minefield}
+                dirtyCells={state.dirtyCells}
+                settings={settings}
+                onFlag={(cell) => {
+                  dispatch({
+                    type: Action.FlagCell,
+                    payload: cell,
+                  });
+                }}
+                onReveal={(cell) => {
+                  dispatch({
+                    type: Action.RevealCell,
+                    payload: cell,
+                  });
+                }}
+              />
+              {(status === GameStatus.Lost || status === GameStatus.Won) && (
+                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50 p-8">
+                  <Button
+                    variant="default"
+                    onClick={() =>
+                      dispatch({
+                        type: Action.Restart,
+                      })
+                    }
+                  >
+                    Restart Game
+                  </Button>
+                </div>
+              )}
+            </div>
           </Paper>
         </div>
       </div>
