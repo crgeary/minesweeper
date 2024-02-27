@@ -2,7 +2,7 @@ import { Segment } from "./segment.component";
 import { parseIntoSegmentData } from "./utils";
 
 type SegmentDisplayProps = {
-  value: number;
+  value: number | string;
 };
 
 export function SegmentDisplay({ value }: SegmentDisplayProps) {

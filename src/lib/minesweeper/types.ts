@@ -3,6 +3,7 @@ export enum Action {
   RevealCell = "reval",
   Init = "init",
   Restart = "restart",
+  SetCurrentTime = "set-current-time",
 }
 
 export enum GameStatus {
@@ -28,10 +29,13 @@ export type GameState = {
   minefield: number[];
   settings: GameSettings;
   dirtyCells: Record<number, DirtyCell>;
+  startTime: number;
+  currentTime: number;
 };
 
 export type GameAction =
   | { type: Action.FlagCell; payload: number }
   | { type: Action.RevealCell; payload: number }
   | { type: Action.Init; payload: GameSettings }
+  | { type: Action.SetCurrentTime; payload: number }
   | { type: Action.Restart };
