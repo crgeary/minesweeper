@@ -74,8 +74,9 @@ function App() {
                 }}
               />
               {(status === GameStatus.Lost || status === GameStatus.Won) && (
-                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50 p-8">
+                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 p-8">
                   <Button
+                    className="shadow-sm"
                     variant="default"
                     onClick={() =>
                       dispatch({
