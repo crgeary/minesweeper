@@ -8,9 +8,8 @@ import { Modal } from "./components/modal.component";
 import { Paper } from "./components/paper.component";
 import { GAME_MODES } from "./constants";
 import { GameMode } from "./types";
-import { Minefield } from "./components/minefield.component";
+import { Minefield } from "./components/minefield/minefield.component";
 
-import { FaCog } from "react-icons/fa";
 import { SegmentDisplay } from "./components/segment-display";
 
 function App() {
@@ -43,12 +42,13 @@ function App() {
 
       <div className="h-full flex items-center justify-center bg-yellow-300">
         <div>
-          <div className="flex justify-between">
-            <button onClick={() => setIsGameModeSelectorOpen(true)}>
-              <span className="sr-only">Settings</span>
-              <FaCog />
-            </button>
-          </div>
+          <Button
+            className="absolute top-4 left-4 shadow-sm"
+            variant="default"
+            onClick={() => setIsGameModeSelectorOpen(true)}
+          >
+            New Game
+          </Button>
 
           <Paper>
             <div className="flex justify-between border-b-2 border-black p-4">
@@ -74,8 +74,9 @@ function App() {
                 }}
               />
               {(status === GameStatus.Lost || status === GameStatus.Won) && (
-                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50 p-8">
+                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 p-8">
                   <Button
+                    className="shadow-sm"
                     variant="default"
                     onClick={() =>
                       dispatch({
