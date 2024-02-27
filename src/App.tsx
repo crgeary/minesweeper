@@ -10,7 +10,6 @@ import { GAME_MODES } from "./constants";
 import { GameMode } from "./types";
 import { Minefield } from "./components/minefield.component";
 
-import { FaCog } from "react-icons/fa";
 import { SegmentDisplay } from "./components/segment-display";
 
 function App() {
@@ -43,12 +42,13 @@ function App() {
 
       <div className="h-full flex items-center justify-center bg-yellow-300">
         <div>
-          <div className="flex justify-between">
-            <button onClick={() => setIsGameModeSelectorOpen(true)}>
-              <span className="sr-only">Settings</span>
-              <FaCog />
-            </button>
-          </div>
+          <Button
+            className="absolute top-4 left-4 shadow-sm"
+            variant="default"
+            onClick={() => setIsGameModeSelectorOpen(true)}
+          >
+            New Game
+          </Button>
 
           <Paper>
             <div className="flex justify-between border-b-2 border-black p-4">

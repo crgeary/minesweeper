@@ -36,16 +36,16 @@ export function ModeSelector({ defaultMode, modes, onStartGame }: ModeSelectorPr
     <div>
       <div className="p-4 flex gap-4">
         <div className="flex flex-col gap-4 pr-4 border-r-2 border-black w-3/5">
-          <Button variant="easy" onClick={() => setGameMode(GameMode.Easy)}>
+          <Button className="w-full" variant="easy" onClick={() => setGameMode(GameMode.Easy)}>
             {modes[GameMode.Easy].name}
           </Button>
-          <Button variant="medium" onClick={() => setGameMode(GameMode.Medium)}>
+          <Button className="w-full" variant="medium" onClick={() => setGameMode(GameMode.Medium)}>
             {modes[GameMode.Medium].name}
           </Button>
-          <Button variant="hard" onClick={() => setGameMode(GameMode.Hard)}>
+          <Button className="w-full" variant="hard" onClick={() => setGameMode(GameMode.Hard)}>
             {modes[GameMode.Hard].name}
           </Button>
-          <Button variant="custom" onClick={() => setMode(GameMode.Custom)}>
+          <Button className="w-full" variant="custom" onClick={() => setMode(GameMode.Custom)}>
             Custom
           </Button>
         </div>
@@ -72,7 +72,7 @@ export function ModeSelector({ defaultMode, modes, onStartGame }: ModeSelectorPr
           </div>
         </div>
       </div>
-      <div className="p-4 border-t-2 border-black">
+      <div className="p-4 border-t-2 border-black flex justify-end">
         <Button
           variant={mode ?? "default"}
           onClick={() => onStartGame({ rows, columns, bombCount }, mode)}
