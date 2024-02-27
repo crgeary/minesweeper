@@ -27,6 +27,7 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 
   return {
     ...gameState,
+    startTime: gameState.startTime !== 0 ? gameState.startTime : performance.now(),
     dirtyCells,
     status,
   };
@@ -79,6 +80,7 @@ export function flagCell(gameState: GameState, chosenCell: number): GameState {
 
   return {
     ...gameState,
+    startTime: gameState.startTime !== 0 ? gameState.startTime : performance.now(),
     status: GameStatus.Playing,
     dirtyCells,
   };
@@ -87,6 +89,8 @@ export function flagCell(gameState: GameState, chosenCell: number): GameState {
 export function initGame(gameState: GameState, settings: GameSettings): GameState {
   return {
     ...gameState,
+    startTime: 0,
+    currentTime: 0,
     settings,
     minefield: makeMinefield(settings.rows, settings.columns, settings.bombCount),
     status: GameStatus.NotStarted,

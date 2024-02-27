@@ -16,8 +16,13 @@ import { SegmentDisplay } from "./components/segment-display";
 function App() {
   const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
 
-  const { dispatch, state, flags, minefield, settings, status } = useMinesweeper({
+  const { dispatch, state, flags, minefield, settings, status, elapsedTime } = useMinesweeper({
     defaultGameSettings: GAME_MODES[GameMode.Easy].settings,
+  });
+
+  const formatter = new Intl.NumberFormat("en-GB", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
 
   return (
@@ -47,7 +52,7 @@ function App() {
 
           <Paper>
             <div className="flex justify-between border-b-2 border-black p-4">
-              <SegmentDisplay value={0} />
+              <SegmentDisplay value={formatter.format(elapsedTime)} />
               <SegmentDisplay value={settings.bombCount - flags.length} />
             </div>
             <div className="relative p-4">

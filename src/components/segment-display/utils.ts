@@ -1,7 +1,7 @@
 import { PERIOD_CHAR, SEGMENTS, VALID_CHARS } from "./constants";
 import { Char, Segment } from "./types";
 
-export function parseIntoSegmentData(value: number): Segment[] {
+export function parseIntoSegmentData(value: number | string): Segment[] {
   const chars = `${value}`.split("").filter((c) => [...VALID_CHARS, PERIOD_CHAR].includes(c));
 
   return chars
