@@ -8,7 +8,7 @@ import { Modal } from "./components/modal.component";
 import { Paper } from "./components/paper.component";
 import { GAME_MODES } from "./constants";
 import { GameMode } from "./types";
-import { Minefield } from "./components/minefield.component";
+import { Minefield } from "./components/minefield/minefield.component";
 
 import { SegmentDisplay } from "./components/segment-display";
 
