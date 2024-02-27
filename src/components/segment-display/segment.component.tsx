@@ -10,7 +10,7 @@ type SegmentProps = {
 };
 
 export function Segment({ char, height, period }: SegmentProps) {
-  const size = { width: 194, height: 312 };
+  const size = { width: 196, height: 312 };
 
   const segments = getCharSegments(char);
 
@@ -32,11 +32,11 @@ export function Segment({ char, height, period }: SegmentProps) {
         />
       ))}
       <circle
-        cx="183"
-        cy="301"
-        r="11"
+        cx="184"
+        cy="300"
+        r="12"
         className={classNames({
-          "fill-gray-200": !period,
+          "fill-gray-100": !period,
           "fill-gray-900": !!period,
         })}
       />
