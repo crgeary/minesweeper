@@ -47,11 +47,32 @@ export function useMinesweeper(input: UseMineseeperInput) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // --
+  const init = (settings: GameSettings) => {
+    dispatch({
+      type: Action.Init,
+      payload: settings,
+    });
+  };
 
-  // start
-  // stop
-  // reset
+  const flagCell = (cell: number) => {
+    dispatch({
+      type: Action.FlagCell,
+      payload: cell,
+    });
+  };
+
+  const revealCell = (cell: number) => {
+    dispatch({
+      type: Action.RevealCell,
+      payload: cell,
+    });
+  };
+
+  const restart = () => {
+    dispatch({
+      type: Action.Restart,
+    });
+  };
 
   useEffect(() => {
     let intervalId: number;
@@ -70,18 +91,20 @@ export function useMinesweeper(input: UseMineseeperInput) {
     return () => clearInterval(intervalId);
   }, [state.status]);
 
-  // --
-
   const flags = Object.keys(state.dirtyCells).filter(
     (k) => state.dirtyCells[Number(k)] === DirtyCell.Flag,
   );
 
   return {
     state,
-    dispatch,
 
-    // ...
+    // methods
+    init,
+    flagCell,
+    revealCell,
+    restart,
 
+    // state
     flags,
     minefield: state.minefield,
     settings: state.settings,
