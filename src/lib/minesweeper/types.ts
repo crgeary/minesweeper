@@ -24,6 +24,17 @@ export type GameSettings = {
   bombCount: number;
 };
 
+export enum TurnAction {
+  FlagCell = "flag",
+  UnflagCell = "unflag",
+  RevealCell = "reveal",
+}
+
+export type GameTurn = {
+  action: TurnAction;
+  cell: number;
+};
+
 export type GameState = {
   status: GameStatus;
   minefield: number[];
@@ -31,6 +42,7 @@ export type GameState = {
   dirtyCells: Record<number, DirtyCell>;
   startTime: number;
   currentTime: number;
+  turns: GameTurn[];
 };
 
 export type GameAction =

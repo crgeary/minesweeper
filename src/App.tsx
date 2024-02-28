@@ -26,6 +26,7 @@ function App() {
     settings,
     status,
     elapsedTime,
+    turns,
   } = useMinesweeper({
     defaultGameSettings: GAME_MODES[GameMode.Easy].settings,
   });
@@ -80,6 +81,16 @@ function App() {
               )}
             </div>
           </Paper>
+        </div>
+        <div className="absolute inset-y-0 right-0 w-32 p-4 text-sm ">
+          <ol className="h-full overflow-auto">
+            {[...turns].reverse().map((turn, i) => (
+              <li key={i} className="flex justify-between">
+                <span className="uppercase font-light opacity-70">{turn.action}</span>
+                <span className="font-medium">{turn.cell}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </>

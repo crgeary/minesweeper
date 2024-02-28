@@ -21,19 +21,21 @@ export function Minefield({ cells, dirtyCells, settings, onFlag, onReveal }: Min
       }}
       className="grid border-t border-r border-black"
     >
-      {cells.map((state, i) => (
-        <Cell
-          key={i}
-          isFlagged={dirtyCells[i] === DirtyCell.Flag}
-          isRevealed={dirtyCells[i] === DirtyCell.Reveal}
-          state={state}
-          onClick={() => onReveal(i)}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            onFlag(i);
-          }}
-        />
-      ))}
+      {cells.map((state, i) => {
+        return (
+          <Cell
+            key={i}
+            isFlagged={dirtyCells[i] === DirtyCell.Flag}
+            isRevealed={dirtyCells[i] === DirtyCell.Reveal}
+            state={state}
+            onClick={() => onReveal(i)}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              onFlag(i);
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
