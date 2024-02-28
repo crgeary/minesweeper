@@ -1,5 +1,5 @@
 import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
-import { Action, GameStatus } from "./lib/minesweeper/types";
+import { GameStatus } from "./lib/minesweeper/types";
 import { useState } from "react";
 import { Button } from "./components/button.component";
 import { ModeSelector } from "./components/mode-selector.component";
@@ -15,7 +15,18 @@ import { SegmentDisplay } from "./components/segment-display";
 function App() {
   const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
 
-  const { dispatch, state, flags, minefield, settings, status, elapsedTime } = useMinesweeper({
+  const {
+    state,
+    init,
+    flagCell,
+    revealCell,
+    restart,
+    flags,
+    minefield,
+    settings,
+    status,
+    elapsedTime,
+  } = useMinesweeper({
     defaultGameSettings: GAME_MODES[GameMode.Easy].settings,
   });
 
@@ -31,10 +42,7 @@ function App() {
           defaultMode={GameMode.Medium}
           modes={GAME_MODES}
           onStartGame={(settings) => {
-            dispatch({
-              type: Action.Init,
-              payload: settings,
-            });
+            init(settings);
             setIsGameModeSelectorOpen(false);
           }}
         />
@@ -60,30 +68,12 @@ function App() {
                 cells={minefield}
                 dirtyCells={state.dirtyCells}
                 settings={settings}
-                onFlag={(cell) => {
-                  dispatch({
-                    type: Action.FlagCell,
-                    payload: cell,
-                  });
-                }}
-                onReveal={(cell) => {
-                  dispatch({
-                    type: Action.RevealCell,
-                    payload: cell,
-                  });
-                }}
+                onFlag={flagCell}
+                onReveal={revealCell}
               />
               {(status === GameStatus.Lost || status === GameStatus.Won) && (
                 <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 p-8">
-                  <Button
-                    className="shadow-sm"
-                    variant="default"
-                    onClick={() =>
-                      dispatch({
-                        type: Action.Restart,
-                      })
-                    }
-                  >
+                  <Button className="shadow-sm" variant="default" onClick={restart}>
                     Restart Game
                   </Button>
                 </div>
