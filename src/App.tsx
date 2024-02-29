@@ -71,6 +71,8 @@ function App() {
                 settings={settings}
                 onFlag={flagCell}
                 onReveal={revealCell}
+                status={status}
+                turns={turns}
               />
               {(status === GameStatus.Lost || status === GameStatus.Won) && (
                 <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 p-8">

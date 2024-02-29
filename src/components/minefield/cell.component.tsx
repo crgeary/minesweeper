@@ -9,10 +9,11 @@ type CellProps = ComponentPropsWithoutRef<"button"> & {
   state: number;
 };
 
-export function Cell({ isFlagged, isRevealed, state, ...props }: CellProps) {
+export function Cell({ isFlagged, isRevealed, state, className, ...props }: CellProps) {
   return (
     <button
       className={classNames(
+        className,
         "w-8 h-8 flex items-center justify-center flex-col border-l border-b border-black text-sm font-bold",
         {
           "bg-gray-100": isFlagged,
