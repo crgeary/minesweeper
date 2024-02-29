@@ -1,18 +1,29 @@
 import { GameSettings } from "../../lib/minesweeper";
-import { DirtyCell } from "../../lib/minesweeper/types";
+import { DirtyCell, GameStatus, GameTurn } from "../../lib/minesweeper/types";
 
 import { Cell } from "./cell.component";
+import classNames from "classnames";
 
 type MinefieldProps = {
   cells: number[];
   dirtyCells: Record<number, DirtyCell>;
   settings: GameSettings;
+  status: GameStatus;
+  turns: GameTurn[];
 
   onFlag: (cell: number) => void;
   onReveal: (cell: number) => void;
 };
 
-export function Minefield({ cells, dirtyCells, settings, onFlag, onReveal }: MinefieldProps) {
+export function Minefield({
+  cells,
+  dirtyCells,
+  settings,
+  status,
+  turns,
+  onFlag,
+  onReveal,
+}: MinefieldProps) {
   return (
     <div
       style={{
@@ -21,19 +32,24 @@ export function Minefield({ cells, dirtyCells, settings, onFlag, onReveal }: Min
       }}
       className="grid border-t border-r border-black"
     >
-      {cells.map((state, i) => (
-        <Cell
-          key={i}
-          isFlagged={dirtyCells[i] === DirtyCell.Flag}
-          isRevealed={dirtyCells[i] === DirtyCell.Reveal}
-          state={state}
-          onClick={() => onReveal(i)}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            onFlag(i);
-          }}
-        />
-      ))}
+      {cells.map((state, i) => {
+        return (
+          <Cell
+            className={classNames({
+              "text-red-700": state === -1 && turns[turns.length - 1]?.cell === i,
+            })}
+            key={i}
+            isFlagged={dirtyCells[i] === DirtyCell.Flag}
+            isRevealed={status === GameStatus.Lost ? true : dirtyCells[i] === DirtyCell.Reveal}
+            state={state}
+            onClick={() => onReveal(i)}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              onFlag(i);
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

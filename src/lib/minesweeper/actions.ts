@@ -1,11 +1,16 @@
 import { makeMinefield } from ".";
-import { DirtyCell, GameSettings, GameState, GameStatus } from "./types";
+import { DirtyCell, GameSettings, GameState, GameStatus, GameTurn, TurnAction } from "./types";
 
 export function revealCell(gameState: GameState, chosenCell: number): GameState {
   const dirtyCells = { ...gameState.dirtyCells };
   let status = GameStatus.Playing;
+  let turn: GameTurn | null = null;
 
   if (dirtyCells[chosenCell] !== DirtyCell.Flag) {
+    if (typeof dirtyCells[chosenCell] === "undefined") {
+      turn = { action: TurnAction.RevealCell, cell: chosenCell };
+    }
+
     dirtyCells[chosenCell] = DirtyCell.Reveal;
 
     if (gameState.minefield[chosenCell] === 0) {
@@ -30,6 +35,7 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
     startTime: gameState.startTime !== 0 ? gameState.startTime : performance.now(),
     dirtyCells,
     status,
+    turns: turn ? [...gameState.turns, turn] : gameState.turns,
   };
 }
 
@@ -71,10 +77,13 @@ function recursiveRevealCell(
 
 export function flagCell(gameState: GameState, chosenCell: number): GameState {
   const dirtyCells = { ...gameState.dirtyCells };
+  let turn: GameTurn | null = null;
 
   if (dirtyCells[chosenCell] === DirtyCell.Flag) {
+    turn = { action: TurnAction.UnflagCell, cell: chosenCell };
     delete dirtyCells[chosenCell];
   } else if (dirtyCells[chosenCell] !== DirtyCell.Reveal) {
+    turn = { action: TurnAction.FlagCell, cell: chosenCell };
     dirtyCells[chosenCell] = DirtyCell.Flag;
   }
 
@@ -83,6 +92,7 @@ export function flagCell(gameState: GameState, chosenCell: number): GameState {
     startTime: gameState.startTime !== 0 ? gameState.startTime : performance.now(),
     status: GameStatus.Playing,
     dirtyCells,
+    turns: turn ? [...gameState.turns, turn] : gameState.turns,
   };
 }
 
@@ -95,5 +105,6 @@ export function initGame(gameState: GameState, settings: GameSettings): GameStat
     minefield: makeMinefield(settings.rows, settings.columns, settings.bombCount),
     status: GameStatus.NotStarted,
     dirtyCells: {},
+    turns: [],
   };
 }

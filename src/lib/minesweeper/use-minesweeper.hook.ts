@@ -43,6 +43,7 @@ export function useMinesweeper(input: UseMineseeperInput) {
     dirtyCells: {},
     startTime: 0,
     currentTime: 0,
+    turns: [],
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -110,5 +111,6 @@ export function useMinesweeper(input: UseMineseeperInput) {
     settings: state.settings,
     status: state.status,
     elapsedTime: (state.currentTime - state.startTime) / 1000,
+    turns: state.turns,
   };
 }
