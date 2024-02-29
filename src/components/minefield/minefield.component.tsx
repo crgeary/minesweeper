@@ -36,7 +36,10 @@ export function Minefield({
         return (
           <Cell
             className={classNames({
-              "text-red-700": state === -1 && turns[turns.length - 1]?.cell === i,
+              "text-red-700":
+                state === -1 &&
+                dirtyCells[i] === DirtyCell.Reveal &&
+                turns[turns.length - 1]?.cell === i,
             })}
             key={i}
             isFlagged={dirtyCells[i] === DirtyCell.Flag}
