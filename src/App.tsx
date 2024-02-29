@@ -76,7 +76,7 @@ function App() {
               />
               {(status === GameStatus.Lost || status === GameStatus.Won) && (
                 <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 p-8">
-                  <Button className="shadow-sm opacity-15" variant="default" onClick={restart}>
+                  <Button className="shadow-sm" variant="default" onClick={restart}>
                     Restart Game
                   </Button>
                 </div>
