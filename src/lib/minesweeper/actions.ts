@@ -1,10 +1,21 @@
-import { makeMinefield } from ".";
+import { makeEmptyMinefield, makeMinefield } from ".";
 import { DirtyCell, GameSettings, GameState, GameStatus, GameTurn, TurnAction } from "./types";
 
 export function revealCell(gameState: GameState, chosenCell: number): GameState {
   const dirtyCells = { ...gameState.dirtyCells };
   let status = GameStatus.Playing;
   let turn: GameTurn | null = null;
+  let minefield = gameState.minefield;
+
+  const reveals = Object.values(dirtyCells).filter((c) => c === DirtyCell.Reveal);
+  if (reveals.length === 0) {
+    minefield = makeMinefield(
+      gameState.settings.rows,
+      gameState.settings.columns,
+      gameState.settings.bombCount,
+      chosenCell,
+    );
+  }
 
   if (dirtyCells[chosenCell] !== DirtyCell.Flag) {
     if (typeof dirtyCells[chosenCell] === "undefined") {
@@ -13,18 +24,18 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 
     dirtyCells[chosenCell] = DirtyCell.Reveal;
 
-    if (gameState.minefield[chosenCell] === 0) {
-      recursiveRevealCell(gameState, dirtyCells, chosenCell);
+    if (minefield[chosenCell] === 0) {
+      recursiveRevealCell(minefield, gameState.settings, dirtyCells, chosenCell);
     }
   }
 
-  if (dirtyCells[chosenCell] === DirtyCell.Reveal && gameState.minefield[chosenCell] === -1) {
+  if (dirtyCells[chosenCell] === DirtyCell.Reveal && minefield[chosenCell] === -1) {
     status = GameStatus.Lost;
   }
 
   const revealCells = Object.values(dirtyCells).filter((c) => c === DirtyCell.Reveal);
   const reveledCellCount = revealCells.length;
-  const nonMineCellCount = gameState.minefield.filter((c) => c !== -1).length;
+  const nonMineCellCount = minefield.filter((c) => c !== -1).length;
 
   if (reveledCellCount === nonMineCellCount) {
     status = GameStatus.Won;
@@ -32,7 +43,9 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 
   return {
     ...gameState,
+    minefield,
     startTime: gameState.startTime !== 0 ? gameState.startTime : performance.now(),
+    currentTime: performance.now(),
     dirtyCells,
     status,
     turns: turn ? [...gameState.turns, turn] : gameState.turns,
@@ -40,34 +53,35 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 }
 
 function recursiveRevealCell(
-  gameState: GameState,
+  minefield: number[],
+  settings: GameSettings,
   dirtyCells: Record<number, DirtyCell>,
   currentCell: number,
 ) {
-  const hasLeft = currentCell % gameState.settings.columns > 0;
-  const hasRight = (currentCell + 1) % gameState.settings.columns !== 0;
+  const hasLeft = currentCell % settings.columns > 0;
+  const hasRight = (currentCell + 1) % settings.columns !== 0;
 
   const positions = [
-    { condition: hasLeft, cell: currentCell - (gameState.settings.columns + 1) },
-    { condition: true, cell: currentCell - gameState.settings.columns },
-    { condition: hasRight, cell: currentCell - (gameState.settings.columns - 1) },
+    { condition: hasLeft, cell: currentCell - (settings.columns + 1) },
+    { condition: true, cell: currentCell - settings.columns },
+    { condition: hasRight, cell: currentCell - (settings.columns - 1) },
     { condition: hasLeft, cell: currentCell - 1 },
     { condition: hasRight, cell: currentCell + 1 },
-    { condition: hasLeft, cell: currentCell + (gameState.settings.columns - 1) },
-    { condition: true, cell: currentCell + gameState.settings.columns },
-    { condition: hasRight, cell: currentCell + (gameState.settings.columns + 1) },
+    { condition: hasLeft, cell: currentCell + (settings.columns - 1) },
+    { condition: true, cell: currentCell + settings.columns },
+    { condition: hasRight, cell: currentCell + (settings.columns + 1) },
   ];
 
   for (const position of positions) {
     if (
       position.condition &&
       position.cell >= 0 &&
-      position.cell < gameState.minefield.length &&
+      position.cell < minefield.length &&
       typeof dirtyCells[position.cell] === "undefined"
     ) {
       dirtyCells[position.cell] = DirtyCell.Reveal;
-      if (gameState.minefield[position.cell] === 0) {
-        recursiveRevealCell(gameState, dirtyCells, position.cell);
+      if (minefield[position.cell] === 0) {
+        recursiveRevealCell(minefield, settings, dirtyCells, position.cell);
       }
     }
   }
@@ -90,6 +104,7 @@ export function flagCell(gameState: GameState, chosenCell: number): GameState {
   return {
     ...gameState,
     startTime: gameState.startTime !== 0 ? gameState.startTime : performance.now(),
+    currentTime: performance.now(),
     status: GameStatus.Playing,
     dirtyCells,
     turns: turn ? [...gameState.turns, turn] : gameState.turns,
@@ -102,7 +117,7 @@ export function initGame(gameState: GameState, settings: GameSettings): GameStat
     startTime: 0,
     currentTime: 0,
     settings,
-    minefield: makeMinefield(settings.rows, settings.columns, settings.bombCount),
+    minefield: makeEmptyMinefield(settings.rows, settings.columns),
     status: GameStatus.NotStarted,
     dirtyCells: {},
     turns: [],

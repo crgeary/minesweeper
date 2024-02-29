@@ -1,6 +1,15 @@
 import { randomBetween } from "../../utils/random-between";
 
-export function makeMinefield(rows: number, columns: number, bombCount: number) {
+export function makeEmptyMinefield(rows: number, columns: number) {
+  return Array.from<number>({ length: rows * columns }).fill(0);
+}
+
+export function makeMinefield(
+  rows: number,
+  columns: number,
+  bombCount: number,
+  initialCell: number,
+) {
   const cellCount = rows * columns;
   const board: number[] = [];
 
@@ -8,7 +17,7 @@ export function makeMinefield(rows: number, columns: number, bombCount: number) 
     throw new Error("Too many bombs!");
   }
 
-  const bombs = chooseBombPositions(cellCount - 1, bombCount);
+  const bombs = chooseBombPositions(cellCount - 1, bombCount, initialCell);
 
   let currentCell = 0;
 
@@ -20,11 +29,14 @@ export function makeMinefield(rows: number, columns: number, bombCount: number) 
   return board;
 }
 
-function chooseBombPositions(cellCount: number, bombCount: number) {
+function chooseBombPositions(cellCount: number, bombCount: number, excludeCell: number) {
   const bombs = new Set<number>();
 
   while (bombs.size < bombCount) {
-    bombs.add(randomBetween(0, cellCount));
+    const cell = randomBetween(0, cellCount);
+    if (cell !== excludeCell) {
+      bombs.add(cell);
+    }
   }
 
   return bombs;

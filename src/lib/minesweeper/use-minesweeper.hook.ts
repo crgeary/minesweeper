@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { Action, DirtyCell, GameAction, GameSettings, GameState, GameStatus } from "./types";
 
 import { flagCell, initGame, revealCell } from "./actions";
-import { makeMinefield } from ".";
+import { makeEmptyMinefield } from ".";
 
 function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
@@ -33,11 +33,7 @@ export function useMinesweeper(input: UseMineseeperInput) {
   };
 
   const initialState: GameState = {
-    minefield: makeMinefield(
-      defaultGameSettings.rows,
-      defaultGameSettings.columns,
-      defaultGameSettings.bombCount,
-    ),
+    minefield: makeEmptyMinefield(defaultGameSettings.rows, defaultGameSettings.columns),
     settings: defaultGameSettings,
     status: GameStatus.NotStarted,
     dirtyCells: {},
