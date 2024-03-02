@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { Action, DirtyCell, GameAction, GameSettings, GameState, GameStatus } from "./types";
 
 import { flagCell, initGame, revealCell } from "./actions";
-import { makeEmptyMinefield } from ".";
+import { makeEmptyMinefield } from "@crgeary/minesweeper";
 
 function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {

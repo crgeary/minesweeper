@@ -1,49 +1,49 @@
-import { randomBetween } from "../../utils/random-between";
+import { randomBetween } from "./utils/random-between";
 
-export function makeEmptyMinefield(rows: number, columns: number) {
+export function makeEmptyMinefield(rows: number, columns: number): number[] {
   return Array.from<number>({ length: rows * columns }).fill(0);
 }
 
 export function makeMinefield(
   rows: number,
   columns: number,
-  bombCount: number,
+  mineCount: number,
   initialCell: number,
-) {
+): number[] {
   const cellCount = rows * columns;
   const board: number[] = [];
 
-  if (bombCount >= cellCount) {
-    throw new Error("Too many bombs!");
+  if (mineCount >= cellCount) {
+    throw new Error("Too many mines!");
   }
 
-  const bombs = chooseBombPositions(cellCount - 1, bombCount, initialCell);
+  const mines = chooseMinePositions(cellCount - 1, mineCount, initialCell);
 
   let currentCell = 0;
 
   while (currentCell < cellCount) {
-    board[currentCell] = getCell(currentCell, columns, bombs);
+    board[currentCell] = getCell(currentCell, columns, mines);
     currentCell++;
   }
 
   return board;
 }
 
-function chooseBombPositions(cellCount: number, bombCount: number, excludeCell: number) {
-  const bombs = new Set<number>();
+function chooseMinePositions(cellCount: number, mineCount: number, excludeCell: number) {
+  const mines = new Set<number>();
 
-  while (bombs.size < bombCount) {
+  while (mines.size < mineCount) {
     const cell = randomBetween(0, cellCount);
     if (cell !== excludeCell) {
-      bombs.add(cell);
+      mines.add(cell);
     }
   }
 
-  return bombs;
+  return mines;
 }
 
-function getCell(currentCell: number, columns: number, bombs: Set<number>) {
-  if (bombs.has(currentCell)) {
+function getCell(currentCell: number, columns: number, mines: Set<number>) {
+  if (mines.has(currentCell)) {
     return -1;
   }
 
@@ -64,12 +64,8 @@ function getCell(currentCell: number, columns: number, bombs: Set<number>) {
   let count = 0;
 
   for (const position of positions) {
-    count += position.condition && bombs.has(position.cell) ? 1 : 0;
+    count += position.condition && mines.has(position.cell) ? 1 : 0;
   }
 
   return count;
 }
-
-// Types..
-
-export type { GameSettings } from "./types";
