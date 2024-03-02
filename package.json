@@ -2,9 +2,13 @@
   "name": "minesweeper",
   "private": true,
   "scripts": {
-    "format": "prettier . --write"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "format": "prettier . --write",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "turbo": "^1.12.4"
   }
 }
