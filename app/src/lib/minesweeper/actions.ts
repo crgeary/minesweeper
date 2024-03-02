@@ -1,4 +1,5 @@
-import { makeEmptyMinefield, makeMinefield } from ".";
+import { makeEmptyMinefield, makeMinefield } from "@crgeary/minesweeper";
+
 import { DirtyCell, GameSettings, GameState, GameStatus, GameTurn, TurnAction } from "./types";
 
 export function revealCell(gameState: GameState, chosenCell: number): GameState {
