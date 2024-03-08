@@ -1,0 +1,44 @@
+name: Lint
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/lint.yaml"
+      - "./app"
+      - "./packages"
+      - "./package.json"
+      - "./pnpm-lock.yaml"
+      - "./turbo.json"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+      - name: Cache PNPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Setup PNPM & Install Packages
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: true
+      - name: Check Format
+        run: pnpm format:check
+      - name: Check Types
+        run: pnpm ts:check
+      - name: Lint
+        run: pnpm lint
