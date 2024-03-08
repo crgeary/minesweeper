@@ -5,10 +5,15 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "format": "turbo format",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "devDependencies": {
+    "@vitest/ui": "^1.3.1",
     "prettier": "^3.2.4",
-    "turbo": "^1.12.4"
+    "turbo": "^1.12.4",
+    "vitest": "^1.3.1"
   }
 }
