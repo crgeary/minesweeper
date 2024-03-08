@@ -14,7 +14,9 @@
     "dev": "vite build --watch",
     "build": "tsc && vite build",
     "format": "prettier . --write",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "format:check": "prettier . --check",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "ts:check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
