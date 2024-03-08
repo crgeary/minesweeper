@@ -10,6 +10,8 @@
       "persistent": true
     },
     "format": {},
-    "lint": {}
+    "format:check": {},
+    "lint": {},
+    "ts:check": {}
   }
 }
