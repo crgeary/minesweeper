@@ -24,6 +24,7 @@ export function Segment({ char, height, period }: SegmentProps) {
     >
       {SEGMENT_PATHS.map((path, i) => (
         <path
+          key={i}
           d={path}
           className={classNames({
             "fill-gray-200": segments[i] === 0,
