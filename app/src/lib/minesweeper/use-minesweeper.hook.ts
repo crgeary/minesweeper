@@ -75,7 +75,7 @@ export function useMinesweeper(input: UseMineseeperInput) {
     let intervalId: number;
 
     if (state.status === GameStatus.Playing) {
-      intervalId = setInterval(
+      intervalId = window.setInterval(
         () =>
           dispatch({
             type: Action.SetCurrentTime,
