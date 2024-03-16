@@ -1,12 +1,13 @@
+import { DirtyCell, DirtyCells, GameStatus } from "@crgeary/minesweeper";
 import { GameSettings } from "../../lib/minesweeper";
-import { DirtyCell, GameStatus, GameTurn } from "../../lib/minesweeper/types";
+import { GameTurn } from "../../lib/minesweeper/types";
 
 import { Cell } from "./cell.component";
 import classNames from "classnames";
 
 type MinefieldProps = {
   cells: number[];
-  dirtyCells: Record<number, DirtyCell>;
+  dirtyCells: DirtyCells;
   settings: GameSettings;
   status: GameStatus;
   turns: GameTurn[];

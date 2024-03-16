@@ -7,7 +7,7 @@ export const GAME_MODES: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>
     settings: {
       rows: 9,
       columns: 9,
-      bombCount: 10,
+      mineCount: 10,
     },
   },
   [GameMode.Medium]: {
@@ -15,7 +15,7 @@ export const GAME_MODES: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>
     settings: {
       rows: 16,
       columns: 16,
-      bombCount: 40,
+      mineCount: 40,
     },
   },
   [GameMode.Hard]: {
@@ -23,7 +23,7 @@ export const GAME_MODES: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>
     settings: {
       rows: 16,
       columns: 30,
-      bombCount: 99,
+      mineCount: 99,
     },
   },
 };

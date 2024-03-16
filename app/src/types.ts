@@ -1,4 +1,4 @@
-import { GameSettings } from "./lib/minesweeper";
+import { GameSettings } from "@crgeary/minesweeper";
 
 export enum GameMode {
   Easy = "easy",

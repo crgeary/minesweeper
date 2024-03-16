@@ -1,6 +1,8 @@
+import { Cell } from "./types";
+
 export function getCell(currentCell: number, columns: number, mines: Set<number>) {
   if (mines.has(currentCell)) {
-    return -1;
+    return Cell.Mine;
   }
 
   const hasLeft = currentCell % columns > 0;

@@ -1,3 +1,5 @@
+import { DirtyCells, GameSettings, GameStatus } from "@crgeary/minesweeper";
+
 export enum Action {
   FlagCell = "flag",
   RevealCell = "reval",
@@ -5,24 +7,6 @@ export enum Action {
   Restart = "restart",
   SetCurrentTime = "set-current-time",
 }
-
-export enum GameStatus {
-  NotStarted = "not-started",
-  Playing = "playing",
-  Won = "won",
-  Lost = "lost",
-}
-
-export enum DirtyCell {
-  Flag = 1,
-  Reveal = -1,
-}
-
-export type GameSettings = {
-  columns: number;
-  rows: number;
-  bombCount: number;
-};
 
 export enum TurnAction {
   FlagCell = "flag",
@@ -39,7 +23,7 @@ export type GameState = {
   status: GameStatus;
   minefield: number[];
   settings: GameSettings;
-  dirtyCells: Record<number, DirtyCell>;
+  dirtyCells: DirtyCells;
   startTime: number;
   currentTime: number;
   turns: GameTurn[];
