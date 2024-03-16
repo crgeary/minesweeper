@@ -1,6 +1,14 @@
-import { makeEmptyMinefield, makeMinefield } from "@crgeary/minesweeper";
+import {
+  Cell,
+  DirtyCell,
+  DirtyCells,
+  GameSettings,
+  GameStatus,
+  makeEmptyMinefield,
+  makeMinefield,
+} from "@crgeary/minesweeper";
 
-import { DirtyCell, GameSettings, GameState, GameStatus, GameTurn, TurnAction } from "./types";
+import { GameState, GameTurn, TurnAction } from "./types";
 
 export function revealCell(gameState: GameState, chosenCell: number): GameState {
   const dirtyCells = { ...gameState.dirtyCells };
@@ -13,7 +21,7 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
     minefield = makeMinefield(
       gameState.settings.rows,
       gameState.settings.columns,
-      gameState.settings.bombCount,
+      gameState.settings.mineCount,
       chosenCell,
     );
   }
@@ -25,18 +33,18 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 
     dirtyCells[chosenCell] = DirtyCell.Reveal;
 
-    if (minefield[chosenCell] === 0) {
+    if (minefield[chosenCell] === Cell.Empty) {
       recursiveRevealCell(minefield, gameState.settings, dirtyCells, chosenCell);
     }
   }
 
-  if (dirtyCells[chosenCell] === DirtyCell.Reveal && minefield[chosenCell] === -1) {
+  if (dirtyCells[chosenCell] === DirtyCell.Reveal && minefield[chosenCell] === Cell.Mine) {
     status = GameStatus.Lost;
   }
 
   const revealCells = Object.values(dirtyCells).filter((c) => c === DirtyCell.Reveal);
   const reveledCellCount = revealCells.length;
-  const nonMineCellCount = minefield.filter((c) => c !== -1).length;
+  const nonMineCellCount = minefield.filter((c) => c !== Cell.Mine).length;
 
   if (reveledCellCount === nonMineCellCount) {
     status = GameStatus.Won;
@@ -56,7 +64,7 @@ export function revealCell(gameState: GameState, chosenCell: number): GameState 
 function recursiveRevealCell(
   minefield: number[],
   settings: GameSettings,
-  dirtyCells: Record<number, DirtyCell>,
+  dirtyCells: DirtyCells,
   currentCell: number,
 ) {
   const hasLeft = currentCell % settings.columns > 0;
@@ -81,7 +89,7 @@ function recursiveRevealCell(
       typeof dirtyCells[position.cell] === "undefined"
     ) {
       dirtyCells[position.cell] = DirtyCell.Reveal;
-      if (minefield[position.cell] === 0) {
+      if (minefield[position.cell] === Cell.Empty) {
         recursiveRevealCell(minefield, settings, dirtyCells, position.cell);
       }
     }

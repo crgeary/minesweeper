@@ -1,5 +1,4 @@
 import { useMinesweeper } from "./lib/minesweeper/use-minesweeper.hook";
-import { GameStatus } from "./lib/minesweeper/types";
 import { useState } from "react";
 import { Button } from "./components/button.component";
 import { ModeSelector } from "./components/mode-selector.component";
@@ -11,6 +10,7 @@ import { GameMode } from "./types";
 import { Minefield } from "./components/minefield/minefield.component";
 
 import { SegmentDisplay } from "./components/segment-display";
+import { GameStatus } from "@crgeary/minesweeper";
 
 function App() {
   const [isGameModeSelectorOpen, setIsGameModeSelectorOpen] = useState(false);
@@ -62,7 +62,7 @@ function App() {
           <Paper>
             <div className="flex justify-between border-b-2 border-black p-4">
               <SegmentDisplay value={formatter.format(elapsedTime)} />
-              <SegmentDisplay value={settings.bombCount - flags.length} />
+              <SegmentDisplay value={settings.mineCount - flags.length} />
             </div>
             <div className="relative p-4">
               <Minefield
