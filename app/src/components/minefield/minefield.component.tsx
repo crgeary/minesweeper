@@ -1,5 +1,4 @@
-import { DirtyCell, DirtyCells, GameStatus } from "@crgeary/minesweeper";
-import { GameSettings } from "../../lib/minesweeper";
+import { DirtyCell, DirtyCells, GameSettings, GameStatus } from "@crgeary/minesweeper";
 import { GameTurn } from "../../lib/minesweeper/types";
 
 import { Cell } from "./cell.component";
