@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./button.component";
 import { Input } from "./input.component";
 import { GameMode, GameModeObject } from "../types";
-import { GameSettings } from "../lib/minesweeper";
+import { GameSettings } from "@crgeary/minesweeper";
 
 type ModeSelectorProps = {
   modes: Omit<Record<GameMode, GameModeObject>, GameMode.Custom>;
