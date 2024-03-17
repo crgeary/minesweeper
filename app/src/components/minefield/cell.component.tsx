@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { ComponentPropsWithoutRef } from "react";
 
-import { FaFlag, FaBomb } from "react-icons/fa";
+import { FaFlag } from "react-icons/fa";
 import { MineIcon } from "../icons";
 
 type CellProps = ComponentPropsWithoutRef<"button"> & {
