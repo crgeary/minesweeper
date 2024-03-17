@@ -43,7 +43,9 @@ export function Minefield({
             })}
             key={i}
             isFlagged={dirtyCells[i] === DirtyCell.Flag}
-            isRevealed={status === GameStatus.Lost ? true : dirtyCells[i] === DirtyCell.Reveal}
+            isRevealed={
+              status === GameStatus.Lost && state === -1 ? true : dirtyCells[i] === DirtyCell.Reveal
+            }
             state={state}
             onClick={() => onReveal(i)}
             onContextMenu={(e) => {
