@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { ComponentPropsWithoutRef } from "react";
 
 import { FaFlag, FaBomb } from "react-icons/fa";
+import { MineIcon } from "../icons";
 
 type CellProps = ComponentPropsWithoutRef<"button"> & {
   isFlagged: boolean;
@@ -33,7 +34,7 @@ export function Cell({ isFlagged, isRevealed, state, className, ...props }: Cell
     >
       <span>
         {isFlagged && <FaFlag />}
-        {isRevealed && state === -1 && <FaBomb />}
+        {isRevealed && state === -1 && <MineIcon className="size-4" />}
         {isRevealed && state !== 0 && state !== -1 && state}
       </span>
     </button>
