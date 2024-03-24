@@ -50,6 +50,7 @@ export function Minefield({
             onClick={() => onReveal(i)}
             onContextMenu={(e) => {
               e.preventDefault();
+              window.navigator.vibrate(75);
               onFlag(i);
             }}
           />
