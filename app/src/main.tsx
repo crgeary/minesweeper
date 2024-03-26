@@ -2,7 +2,7 @@ import "@fontsource-variable/inter";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import App from "./app.component";
 
 import "./styles/main.css";
 
