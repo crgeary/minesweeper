@@ -27,10 +27,10 @@ export function Minefield({
   return (
     <div
       style={{
-        gridTemplateColumns: `repeat(${settings.columns}, minmax(0, 1fr))`,
-        gridTemplateRows: `repeat(${settings.rows}, minmax(0, 1fr))`,
+        gridTemplateColumns: `repeat(${settings.columns}, 1fr)`,
+        gridTemplateRows: `repeat(${settings.rows}, 1fr)`,
       }}
-      className="grid border-t border-r border-black"
+      className="grid border-t border-r border-black overflow-scroll"
     >
       {cells.map((state, i) => {
         return (
