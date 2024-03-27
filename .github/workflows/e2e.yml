@@ -1,0 +1,44 @@
+name: Tests (e2e)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+      - name: Cache PNPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Setup PNPM & Install Packages
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: true
+      - name: Install Playwright Browsers
+        run: pnpm --filter=minesweeper exec playwright install --with-deps
+      - name: Run Playwright tests
+        run: pnpm --filter=minesweeper test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        working-directory: ./app
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

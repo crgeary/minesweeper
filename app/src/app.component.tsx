@@ -58,7 +58,7 @@ function App() {
           New Game
         </Button>
 
-        <Paper className="max-w-full">
+        <Paper className="max-w-full" data-testid="game">
           <div className="flex justify-between border-b-2 border-black p-4">
             <SegmentDisplay value={formatter.format(elapsedTime)} />
             <SegmentDisplay value={settings.mineCount - flags.length} />

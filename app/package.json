@@ -10,6 +10,7 @@
     "format:check": "prettier . --check",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "test:e2e": "playwright test --ui",
     "ts:check": "tsc --noEmit"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "react-icons": "^5.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.42.1",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
