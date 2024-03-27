@@ -26,6 +26,7 @@ export function Minefield({
 }: MinefieldProps) {
   return (
     <div
+      data-testid="minefield"
       style={{
         gridTemplateColumns: `repeat(${settings.columns}, 1fr)`,
         gridTemplateRows: `repeat(${settings.rows}, 1fr)`,
