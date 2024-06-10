@@ -23,7 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "eslint": "^8.57.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.3.1",
     "typescript": "^5.4.3",
     "vite": "^5.0.12",
     "vite-plugin-dts": "^3.7.3",
